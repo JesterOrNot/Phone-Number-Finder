@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include <regex>
 #include <string>
@@ -5,7 +6,10 @@
 using namespace std;
 
 string readFileToString(string filename) {
-  // WIP
+  ifstream file(filename);
+  std::string content((std::istreambuf_iterator<char>(file)),
+                      (std::istreambuf_iterator<char>()));
+  return content;
 }
 
 vector<string> findPhoneNumbers(string contents) {
@@ -23,8 +27,7 @@ void printMatches(vector<string> matches) {
     cout << item << endl;
   }
 }
-int main() {
-  vector<string> myVar = findPhoneNumbers("847-845-8577 224-565-6294 gretbrtbe rwhfyb");
-  printMatches(myVar);
+int main(int argc, char **argv) {
+  printMatches(findPhoneNumbers(readFileToString(argv[1])));
   return 0;
 }

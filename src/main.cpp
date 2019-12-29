@@ -1,3 +1,4 @@
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <regex>
@@ -6,9 +7,16 @@
 using namespace std;
 
 string readFileToString(string filename) {
-  ifstream file(filename);
-  std::string content((std::istreambuf_iterator<char>(file)),
-                      (std::istreambuf_iterator<char>()));
+  string content;
+  try {
+    ifstream file(filename);
+    std::string content1((std::istreambuf_iterator<char>(file)),
+                         (std::istreambuf_iterator<char>()));
+    content = content1;
+  } catch (exception e) {
+    cout << "The file does not exist!\n";
+    return "";
+  }
   return content;
 }
 
@@ -28,6 +36,10 @@ void printMatches(vector<string> matches) {
   }
 }
 int main(int argc, char **argv) {
-  printMatches(findPhoneNumbers(readFileToString(argv[1])));
+  if (argc >= 2) {
+    printMatches(findPhoneNumbers(readFileToString(argv[1])));
+  } else {
+    cout << "Please specify a file!\n";
+  }
   return 0;
 }
